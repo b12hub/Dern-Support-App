@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dern-Support | Knowledge Article</title>
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+<!-- Header -->
+<header class="header">
+    <div class="container header-container">
+        <div class="logo">
+            <a href=../index.html">Dern-Support</a>
+        </div>
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <nav class="nav" id="mainNav">
+            <div class="nav-item">
+                <a href="../index.html" class="nav-link">Home</a>
+            </div>
+            <div class="nav-item">
+                <a href="index.html" class="nav-link active">Knowledge Base</a>
+            </div>
+            <div class="nav-item" id="authLinks">
+                <!-- Will be populated by JavaScript -->
+            </div>
+            <div class="nav-item" id="registerLinks">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </nav>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="main">
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar for logged-in users -->
+            <div class="col-3" id="sidebarContainer" style="display: none;">
+                <div class="sidebar">
+                    <ul class="sidebar-menu">
+                        <li class="sidebar-item">
+                            <a href="../dashboard.html" class="sidebar-link">
+                                <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="../support/my-requests.html" class="sidebar-link">
+                                <i class="fas fa-ticket-alt mr-2"></i> My Requests
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="../support/new-request.html" class="sidebar-link">
+                                <i class="fas fa-plus-circle mr-2"></i> New Request
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="index.html" class="sidebar-link active">
+                                <i class="fas fa-book mr-2"></i> Knowledge Base
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="../profile.html" class="sidebar-link">
+                                <i class="fas fa-user-circle mr-2"></i> My Profile
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="col-12" id="mainContentFull">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <a href="index.html" class="btn btn-secondary mb-2">
+                            <i class="fas fa-arrow-left mr-1"></i> Back to Knowledge Base
+                        </a>
+                        <h1 id="articleTitle">Loading article...</h1>
+                    </div>
+                    <div id="adminControls" style="display: none;">
+                        <button id="editArticleBtn" class="btn btn-primary">
+                            <i class="fas fa-edit mr-1"></i> Edit Article
+                        </button>
+                    </div>
+                </div>
+
+                <div id="messageContainer" style="display: none;"></div>
+
+                <!-- Article Metadata -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <p id="articleSummary" class="lead">Loading summary...</p>
+                                <div class="mb-2">
+                                    <strong>Category:</strong> <span id="articleCategory">Loading...</span>
+                                </div>
+                                <div id="articleTags" class="mb-2">
+                                    <strong>Tags:</strong> <span>Loading...</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-md-right">
+                                <div class="mb-2">
+                                    <strong>Published:</strong> <span id="articlePublished">Loading...</span>
+                                </div>
+                                <div class="mb-2">
+                                    <strong>Last Updated:</strong> <span id="articleUpdated">Loading...</span>
+                                </div>
+                                <div>
+                                    <strong>Views:</strong> <span id="articleViews">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Article Content -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div id="articleContent" class="article-content">
+                            <p class="text-center">Loading article content...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Related Articles -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="mb-0">Related Articles</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="relatedArticles">
+                            <p class="text-center">Loading related articles...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Article Feedback -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="mb-0">Was this article helpful?</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            <button id="helpfulYesBtn" class="btn btn-success mr-2">
+                                <i class="fas fa-thumbs-up mr-1"></i> Yes
+                            </button>
+                            <button id="helpfulNoBtn" class="btn btn-danger">
+                                <i class="fas fa-thumbs-down mr-1"></i> No
+                            </button>
+                        </div>
+                        <div id="feedbackFormContainer" style="display: none;">
+                            <form id="feedbackForm">
+                                <div class="form-group">
+                                    <label for="feedbackComment" class="form-label">How can we improve this article?</label>
+                                    <textarea id="feedbackComment" class="form-control" rows="3" placeholder="Your feedback helps us improve our knowledge base"></textarea>
+                                </div>
+                                <div class="form-group text-right">
+                                    <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="feedbackThankYou" style="display: none;">
+                            <div class="alert alert-success">
+                                <i class="fas fa-check-circle mr-1"></i> Thank you for your feedback!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Support Request CTA for logged-in users -->
+                <div id="supportRequestCTA" class="card mb-4" style="display: none;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h3 class="mb-1">Need more help?</h3>
+                                <p class="mb-0">If this article didn't solve your issue, submit a support request.</p>
+                            </div>
+                            <a href="../support/new-request.html" class="btn btn-primary">
+                                <i class="fas fa-plus-circle mr-1"></i> New Support Request
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container footer-content">
+        <div class="copyright">
+            &copy; 2025 Dern-Support. All rights reserved.
+        </div>
+        <div class="footer-links">
+            <a href="#" class="mr-3">Privacy Policy</a>
+            <a href="#" class="mr-3">Terms of Service</a>
+            <a href="#">Contact Us</a>
+        </div>
+    </div>
+</footer>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay" style="display: none;">
+    <div class="spinner"></div>
+</div>
+
+<!-- JavaScript -->
+<script src="../../assets/js/utils/auth.js"></script>
+<script src="../../assets/js/main.js"></script>
+<script src="../../assets/js/api/knowledgeBase.js"></script>
+<script>
+    let currentArticle = null;
+    let isAdmin = false;
+    let feedbackSubmitted = false;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Check if user is logged in
+        if (isAuthenticated()) {
+            // Show sidebar for logged-in users
+            document.getElementById('sidebarContainer').style.display = 'block';
+            document.getElementById('mainContentFull').classList.remove('col-12');
+            document.getElementById('mainContentFull').classList.add('col-9');
+
+            // Show support request CTA
+            document.getElementById('supportRequestCTA').style.display = 'block';
+
+            // Check if user is admin
+            const user = JSON.parse(localStorage.getItem('user'));
+            isAdmin = user.userType === 'admin';
+
+            if (isAdmin) {
+                document.getElementById('adminControls').style.display = 'block';
+            }
+        }
+
+        // Get article ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const articleId = urlParams.get('id');
+
+        if (!articleId) {
+            showError('No article ID provided', 'messageContainer');
+            return;
+        }
+
+        // Load article
+        await loadArticle(articleId);
+
+        // Set up event listeners
+        document.getElementById('helpfulYesBtn').addEventListener('click', () => {
+            submitFeedback(true);
+        });
+
+        document.getElementById('helpfulNoBtn').addEventListener('click', () => {
+            submitFeedback(false);
+        });
+
+        document.getElementById('feedbackForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            submitFeedbackComment();
+        });
+
+        if (document.getElementById('editArticleBtn')) {
+            document.getElementById('editArticleBtn').addEventListener('click', () => {
+                window.location.href = `admin/edit-article.html?id=${articleId}`;
+            });
+        }
+    });
+
+    async function loadArticle(articleId) {
+        try {
+            const result = await getKnowledgeArticleById(articleId);
+
+            if (result.success) {
+                currentArticle = result.data.article;
+                updateArticleUI();
+
+                // Load related articles
+                loadRelatedArticles();
+            } else {
+                showError('Failed to load article', 'messageContainer');
+            }
+        } catch (error) {
+            showError('An error occurred while loading the article', 'messageContainer');
+            console.error('Load article error:', error);
+        }
+    }
+
+    function updateArticleUI() {
+        // Update basic details
+        document.getElementById('articleTitle').textContent = currentArticle.title;
+        document.getElementById('articleSummary').textContent = currentArticle.summary;
+        document.getElementById('articleCategory').textContent = currentArticle.category.name;
+        document.getElementById('articleViews').textContent = currentArticle.viewCount;
+
+        // Format dates
+        const publishedDate = new Date(currentArticle.createdAt);
+        const updatedDate = new Date(currentArticle.updatedAt);
+
+        document.getElementById('articlePublished').textContent = publishedDate.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
+
+        document.getElementById('articleUpdated').textContent = updatedDate.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        });
+
+        // Update tags
+        if (currentArticle.tags && currentArticle.tags.length > 0) {
+            const tagsHtml = currentArticle.tags.map(tag =>
+                `<span class="badge badge-light mr-1">${tag}</span>`
+            ).join('');
+
+            document.getElementById('articleTags').innerHTML = `<strong>Tags:</strong> ${tagsHtml}`;
+        } else {
+            document.getElementById('articleTags').innerHTML = '<strong>Tags:</strong> None';
+        }
+
+        // Update content
+        document.getElementById('articleContent').innerHTML = currentArticle.content;
+
+        // Set page title
+        document.title = `Dern-Support | ${currentArticle.title}`;
+    }
+
+    async function loadRelatedArticles() {
+        try {
+            // Get articles from the same category
+            const result = await getKnowledgeArticles({
+                category: currentArticle.category._id,})
+            if (result.success) {
+                const relatedArticles = result.data.articles.filter(article => article._id !== currentArticle._id);
+                const relatedArticlesContainer = document.getElementById('relatedArticles');
+
+                if (relatedArticles.length > 0) {
+                    relatedArticlesContainer.innerHTML = relatedArticles.map(article => `
+                        <div class="related-article">
+                            <h5><a href="article.html?id=${article._id}">${article.title}</a></h5>
+                            <p>${article.summary}</p>
+                        </div>
+                    `).join('');
+                } else {
+                    relatedArticlesContainer.innerHTML = '<p class="text-center">No related articles found.</p>';
+                }
+            } else {
+                showError('Failed to load related articles', 'relatedArticles');
+            }
+        } catch (error) {
+            showError('An error occurred while loading related articles', 'relatedArticles');
+            console.error('Load related articles error:', error);
+        }
+    }
+    function showError(message, containerId) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = `<div class="alert alert-danger">${message}</div>`;
+        container.style.display = 'block';
+    }
+    function showSuccess(message, containerId) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = `<div class="alert alert-success">${message}</div>`;
+        container.style.display = 'block';
+    }
+    function submitFeedback(isHelpful) {
+        if (feedbackSubmitted) return;
+
+        const feedbackData = {
+            articleId: currentArticle._id,
+            isHelpful: isHelpful
+        };
+
+        submitArticleFeedback(feedbackData)
+            .then(response => {
+                if (response.success) {
+                    feedbackSubmitted = true;
+                    document.getElementById('feedbackFormContainer').style.display = 'none';
+                    document.getElementById('feedbackThankYou').style.display = 'block';
+                    showSuccess('Thank you for your feedback!', 'messageContainer');
+                } else {
+                    showError('Failed to submit feedback', 'messageContainer');
+                }
+            })
+            .catch(error => {
+                showError('An error occurred while submitting feedback', 'messageContainer');
+                console.error('Submit feedback error:', error);
+            });
+    }   </script>

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dern-Support | Admin Dashboard</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+<!-- Header -->
+<header class="header">
+    <div class="container header-container">
+        <div class="logo">
+            <a href="../../index.html">Dern-Support</a>
+        </div>
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <nav class="nav" id="mainNav">
+            <div class="nav-item">
+                <a href="../../index.html" class="nav-link">Home</a>
+            </div>
+            <div class="nav-item">
+                <a href="../pages/knowledge/index.html" class="nav-link">Knowledge Base</a>
+            </div>
+            <div class="nav-item" id="authLinks">
+                <!-- Will be populated by JavaScript -->
+            </div>
+            <div class="nav-item" id="registerLinks">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </nav>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="main">
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-3">
+                <div class="sidebar">
+                    <ul class="sidebar-menu">
+                        <li class="sidebar-item">
+                            <a href="dashboard.html" class="sidebar-link active">
+                                <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="support-requests.html" class="sidebar-link">
+                                <i class="fas fa-ticket-alt mr-2"></i> Support Requests
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="users.html" class="sidebar-link">
+                                <i class="fas fa-users mr-2"></i> Users
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="inventory.html" class="sidebar-link">
+                                <i class="fas fa-boxes mr-2"></i> Inventory
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="scheduling.html" class="sidebar-link">
+                                <i class="fas fa-calendar-alt mr-2"></i> Scheduling
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="knowledge-base.html" class="sidebar-link">
+                                <i class="fas fa-book mr-2"></i> Knowledge Base
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="reports.html" class="sidebar-link">
+                                <i class="fas fa-chart-bar mr-2"></i> Reports
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="settings.html" class="sidebar-link">
+                                <i class="fas fa-cog mr-2"></i> Settings
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="col-9">
+                <h1>Admin Dashboard</h1>
+                <p class="mb-4">Welcome back, <span id="adminNameDisplay">Admin</span>!</p>
+
+                <div id="messageContainer" style="display: none;"></div>
+
+                <!-- Quick Stats -->
+                <div class="dashboard-stats mb-4">
+                    <div class="stat-card primary">
+                        <div class="stat-value" id="activeRequestsCount">0</div>
+                        <div class="stat-label">Active Requests</div>
+                    </div>
+                    <div class="stat-card success">
+                        <div class="stat-value" id="resolvedRequestsCount">0</div>
+                        <div class="stat-label">Resolved Today</div>
+                    </div>
+                    <div class="stat-card warning">
+                        <div class="stat-value" id="pendingRequestsCount">0</div>
+                        <div class="stat-label">Pending Requests</div>
+                    </div>
+                    <div class="stat-card danger">
+                        <div class="stat-value" id="criticalRequestsCount">0</div>
+                        <div class="stat-label">Critical Issues</div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h3 class="mb-0">Request Trends</h3>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="requestTrendsChart" height="250"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h3 class="mb-0">Request Types</h3>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="requestTypesChart" height="250"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Support Requests -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">Recent Support Requests</h3>
+                        <a href="support-requests.html" class="btn btn-primary btn-sm">View All</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>User</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Priority</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody id="recentRequestsTable">
+                                <tr>
+                                    <td colspan="8" class="text-center">Loading...</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inventory Status -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">Inventory Status</h3>
+                        <a href="inventory.html" class="btn btn-primary btn-sm">Manage Inventory</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4 class="mb-3">Low Stock Items</h4>
+                                <div id="lowStockItems">
+                                    <p class="text-center">Loading...</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h4 class="mb-3">Recent Transactions</h4>
+                                <div id="recentTransactions">
+                                    <p class="text-center">Loading...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Technician Schedule -->
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">Today's Schedule</h3>
+                        <a href="scheduling.html" class="btn btn-primary btn-sm">Full Schedule</a>
+                    </div>
+                    <div class="card-body">
+                        <div id="todaySchedule">
+                            <p class="text-center">Loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container footer-content">
+        <div class="copyright">
+            &copy; 2025 Dern-Support. All rights reserved.
+        </div>
+        <div class="footer-links">
+            <a href="#" class="mr-3">Privacy Policy</a>
+            <a href="#" class="mr-3">Terms of Service</a>
+            <a href="#">Contact Us</a>
+        </div>
+    </div>
+</footer>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay" style="display: none;">
+    <div class="spinner"></div>
+</div>
+
+<!-- JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+<script src="../assets/js/utils/auth.js"></script>
+<script src="../assets/js/main.js"></script>
+<script src="../assets/js/api/supportRequests.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Check if user is admin
+        if (!requireAuth(['admin'])) {
+            return;
+        }
+
+        // Get user data
+        const user = JSON.parse(localStorage.getItem('user'));
+
+        // Update admin name display
+        document.getElementById('adminNameDisplay').textContent = `${user.profile.firstName} ${user.profile.lastName}`;
+
+        // Load dashboard data
+        loadDashboardData();
+
+        // Initialize charts
+        initCharts();
+    });
+
+    async function loadDashboardData() {
+        try {
+            showLoading();
+
+            // Load support requests
+            const requestsResult = await getAllSupportRequests({ limit: 5 });
+
+            if (requestsResult.success) {
+                // Update stats
+                updateRequestStats(requestsResult.data);
+
+                // Update recent requests table
+                updateRecentRequestsTable(requestsResult.data.requests);
+            } else {
+                showError('Failed to load support requests', 'messageContainer');
+            }
+
+            // Load inventory data (mock data for now)
+            loadInventoryData();
+
+            // Load schedule data (mock data for now)
+            loadScheduleData();
+
+            hideLoading();
+        } catch (error) {
+            hideLoading();
+            showError('An error occurred while loading dashboard data', 'messageContainer');
+            console.error('Dashboard loading error:', error);
+        }
+    }
+
+    function updateRequestStats(data) {
+        // For a real implementation, these would come from the API
+        // Using mock data for demonstration
+        document.getElementById('activeRequestsCount').textContent = '24';
+        document.getElementById('resolvedRequestsCount').textContent = '8';
+        document.getElementById('pendingRequestsCount').textContent = '12';
+        document.getElementById('criticalRequestsCount').textContent = '3';
+    }
+
+    function updateRecentRequestsTable(requests) {
+        const tableBody = document.getElementById('recentRequestsTable');
+
+        if (requests.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="8" class="text-center">No support requests found</td></tr>';
+            return;
+        }
+
+        let html = '';
+
+        requests.forEach(request => {
+            html += `
+                    <tr>
+                        <td>${request._id.substring(0, 8)}...</td>
+                        <td>${request.title}</td>
+                        <td>${request.user.profile.firstName} ${request.user.profile.lastName}</td>
+                        <td>${request.requestType}</td>
+                        <td>${formatStatus(request.status)}</td>
+                        <td>${formatPriority(request.priority)}</td>
+                        <td>${formatDate(request.createdAt)}</td>
+                        <td>
+                            <a href="request-details.html?id=${request._id}" class="btn btn-sm btn-secondary">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                        </td>
+                    </tr>
+                `;
+        });
+
+        tableBody.innerHTML = html;
+    }
+
+    function loadInventoryData() {
+        // Mock data for inventory
+        const lowStockItems = [
+            { name: 'Laptop RAM 8GB DDR4', stock: 3, minStock: 5 },
+            { name: 'HDMI Cables', stock: 4, minStock: 10 },
+            { name: 'SSD 500GB', stock: 2, minStock: 5 },
+            { name: 'Network Switch 8-Port', stock: 1, minStock: 3 }
+        ];
+
+        const recentTransactions = [
+            { item: 'Laptop Battery', type: 'out', quantity: 1, date: '2025-05-30', technician: 'John Doe' },
+            { item: 'USB-C Adapters', type: 'in', quantity: 20, date: '2025-05-29', technician: 'Admin' },
+            { item: 'Wireless Mouse', type: 'out', quantity: 2, date: '2025-05-28', technician: 'Jane Smith' }
+        ];}
+
+
+
+</script>

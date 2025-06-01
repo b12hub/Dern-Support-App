@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dern-Support | My Support Requests</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+<!-- Header -->
+<header class="header">
+    <div class="container header-container">
+        <div class="logo">
+            <a href="../../index.html">Dern-Support</a>
+        </div>
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <nav class="nav" id="mainNav">
+            <div class="nav-item">
+                <a href="../../index.html" class="nav-link">Home</a>
+            </div>
+            <div class="nav-item">
+                <a href="../knowledge/index.html" class="nav-link">Knowledge Base</a>
+            </div>
+            <div class="nav-item" id="authLinks">
+                <!-- Will be populated by JavaScript -->
+            </div>
+            <div class="nav-item" id="registerLinks">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </nav>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="main">
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-3">
+                <div class="sidebar">
+                    <ul class="sidebar-menu">
+                        <li class="sidebar-item">
+                            <a href="../dashboard.html" class="sidebar-link">
+                                <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="my-requests.html" class="sidebar-link active">
+                                <i class="fas fa-ticket-alt mr-2"></i> My Requests
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="new-request.html" class="sidebar-link">
+                                <i class="fas fa-plus-circle mr-2"></i> New Request
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="../knowledge/index.html" class="sidebar-link">
+                                <i class="fas fa-book mr-2"></i> Knowledge Base
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="../profile.html" class="sidebar-link">
+                                <i class="fas fa-user-circle mr-2"></i> My Profile
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="col-9">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1>My Support Requests</h1>
+                    <a href="new-request.html" class="btn btn-primary">
+                        <i class="fas fa-plus-circle mr-1"></i> New Request
+                    </a>
+                </div>
+
+                <div id="messageContainer" style="display: none;"></div>
+
+                <!-- Filters -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <form id="filterForm" class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="statusFilter" class="form-label">Status</label>
+                                    <select id="statusFilter" class="form-control">
+                                        <option value="">All Statuses</option>
+                                        <option value="new">New</option>
+                                        <option value="assigned">Assigned</option>
+                                        <option value="in_progress">In Progress</option>
+                                        <option value="on_hold">On Hold</option>
+                                        <option value="resolved">Resolved</option>
+                                        <option value="closed">Closed</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="sortBy" class="form-label">Sort By</label>
+                                    <select id="sortBy" class="form-control">
+                                        <option value="createdAt">Date Created</option>
+                                        <option value="updatedAt">Last Updated</option>
+                                        <option value="priority">Priority</option>
+                                        <option value="status">Status</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="sortOrder" class="form-label">Order</label>
+                                    <select id="sortOrder" class="form-control">
+                                        <option value="desc">Newest First</option>
+                                        <option value="asc">Oldest First</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 text-right">
+                                <button type="submit" class="btn btn-primary">Apply Filters</button>
+                                <button type="button" id="resetFilters" class="btn btn-secondary">Reset</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Support Requests Table -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Priority</th>
+                                    <th>Created</th>
+                                    <th>Updated</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody id="requestsTable">
+                                <tr>
+                                    <td colspan="8" class="text-center">Loading...</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="d-flex justify-content-between align-items-center mt-4">
+                            <div>
+                                <span id="paginationInfo">Showing 0 of 0 requests</span>
+                            </div>
+                            <div>
+                                <button id="prevPage" class="btn btn-sm btn-secondary mr-2" disabled>
+                                    <i class="fas fa-chevron-left"></i> Previous
+                                </button>
+                                <button id="nextPage" class="btn btn-sm btn-secondary" disabled>
+                                    Next <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container footer-content">
+        <div class="copyright">
+            &copy; 2025 Dern-Support. All rights reserved.
+        </div>
+        <div class="footer-links">
+            <a href="#" class="mr-3">Privacy Policy</a>
+            <a href="#" class="mr-3">Terms of Service</a>
+            <a href="#">Contact Us</a>
+        </div>
+    </div>
+</footer>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay" style="display: none;">
+    <div class="spinner"></div>
+</div>
+
+<!-- JavaScript -->
+<script src="../../assets/js/utils/auth.js"></script>
+<script src="../../assets/js/main.js"></script>
+<script src="../../assets/js/api/supportRequests.js"></script>
+<script>
+    // Pagination state
+    let currentPage = 1;
+    let totalPages = 1;
+    let limit = 10;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Check if user is authenticated
+        if (!requireAuth()) {
+            return;
+        }
+
+        // Load support requests
+        loadSupportRequests();
+
+        // Handle filter form submission
+        const filterForm = document.getElementById('filterForm');
+        filterForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            currentPage = 1; // Reset to first page when filtering
+            loadSupportRequests();
+        });
+
+        // Handle reset filters
+        document.getElementById('resetFilters').addEventListener('click', () => {
+            filterForm.reset();
+            currentPage = 1;
+            loadSupportRequests();
+        });
+
+        // Handle pagination
+        document.getElementById('prevPage').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                loadSupportRequests();
+            }
+        });
+
+        document.getElementById('nextPage').addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                loadSupportRequests();
+            }
+        });
+    });
+
+    async function loadSupportRequests() {
+        try {
+            // Get filter values
+            const status = document.getElementById('statusFilter').value;
+            const sortBy = document.getElementById('sortBy').value;
+            const sortOrder = document.getElementById('sortOrder').value;
+
+            // Prepare options
+            const options = {
+                page: currentPage,
+                limit,
+                sortBy,
+                sortOrder
+            };
+
+            if (status) {
+                options.status = status;
+            }
+
+            // Get support requests
+            const result = await getUserRequests(options);
+
+            if (result.success) {
+                // Update table
+                updateRequestsTable(result.data.requests);
+
+                // Update pagination
+                updatePagination(result.data.pagination);
+            } else {
+                showError('Failed to load support requests', 'messageContainer');
+            }
+        } catch (error) {
+            showError('An error occurred while loading support requests', 'messageContainer');
+            console.error('Load support requests error:', error);
+        }
+    }
+
+    function updateRequestsTable(requests) {
+        const tableBody = document.getElementById('requestsTable');
+
+        if (requests.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="8" class="text-center">No support requests found</td></tr>';
+            return;
+        }
+
+        let html = '';
+
+        requests.forEach(request => {
+            html += `
+                    <tr>
+                        <td>${request._id.substring(0, 8)}...</td>
+                        <td>${request.title}</td>
+                        <td>${request.requestType}</td>
+                        <td>${formatStatus(request.status)}</td>
+                        <td>${formatPriority(request.priority)}</td>
+                        <td>${formatDate(request.createdAt)}</td>
+                        <td>${formatDate(request.updatedAt)}</td>
+                        <td>
+                            <a href="request-details.html?id=${request._id}" class="btn btn-sm btn-secondary">
+                                <i class="fas fa-eye"></i> View
+                            </a>
+                        </td>
+                    </tr>
+                `;
+        });
+
+        tableBody.innerHTML = html;
+    }
+
+    function updatePagination(pagination) {
+        // Update pagination info
+        document.getElementById('paginationInfo').textContent = `Showing ${pagination.page} of ${pagination.pages} pages (${pagination.total} requests)`;
+
+        // Update current page and total pages
+        currentPage = pagination.page;
+        totalPages = pagination.pages;
+
+        // Update button states
+        document.getElementById('prevPage').disabled = currentPage <= 1;
+        document.getElementById('nextPage').disabled = currentPage >= totalPages;
+    }
+</script>
+</body>
+</html>

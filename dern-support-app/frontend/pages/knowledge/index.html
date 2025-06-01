@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dern-Support | Knowledge Base</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+<!-- Header -->
+<header class="header">
+    <div class="container header-container">
+        <div class="logo">
+            <a href="../../index.html">Dern-Support</a>
+        </div>
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <nav class="nav" id="mainNav">
+            <div class="nav-item">
+                <a href="../../index.html" class="nav-link">Home</a>
+            </div>
+            <div class="nav-item">
+                <a href="index.html" class="nav-link active">Knowledge Base</a>
+            </div>
+            <div class="nav-item" id="authLinks">
+                <!-- Will be populated by JavaScript -->
+            </div>
+            <div class="nav-item" id="registerLinks">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </nav>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="main">
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar for logged-in users -->
+            <div class="col-3" id="sidebarContainer" style="display: none;">
+                <div class="sidebar">
+                    <ul class="sidebar-menu">
+                        <li class="sidebar-item">
+                            <a href="../dashboard.html" class="sidebar-link">
+                                <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="../support/my-requests.html" class="sidebar-link">
+                                <i class="fas fa-ticket-alt mr-2"></i> My Requests
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="../support/new-request.html" class="sidebar-link">
+                                <i class="fas fa-plus-circle mr-2"></i> New Request
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="index.html" class="sidebar-link active">
+                                <i class="fas fa-book mr-2"></i> Knowledge Base
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="../profile.html" class="sidebar-link">
+                                <i class="fas fa-user-circle mr-2"></i> My Profile
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="col-12" id="mainContentFull">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1>Knowledge Base</h1>
+                    <div id="adminControls" style="display: none;">
+                        <a href="admin/manage-articles.html" class="btn btn-primary">
+                            <i class="fas fa-cog mr-1"></i> Manage Articles
+                        </a>
+                    </div>
+                </div>
+
+                <div id="messageContainer" style="display: none;"></div>
+
+                <!-- Search and Filters -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <form id="searchForm" class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="searchQuery" class="form-label">Search Knowledge Base</label>
+                                    <div class="input-group">
+                                        <input type="text" id="searchQuery" class="form-control" placeholder="Enter keywords...">
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-search"></i> Search
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="categoryFilter" class="form-label">Filter by Category</label>
+                                    <select id="categoryFilter" class="form-control">
+                                        <option value="">All Categories</option>
+                                        <!-- Will be populated by JavaScript -->
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="sortBy" class="form-label">Sort By</label>
+                                    <select id="sortBy" class="form-control">
+                                        <option value="createdAt">Newest</option>
+                                        <option value="viewCount">Most Viewed</option>
+                                        <option value="title">Title (A-Z)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Categories Section -->
+                <div class="mb-4">
+                    <h2 class="mb-3">Categories</h2>
+                    <div class="row" id="categoriesContainer">
+                        <div class="col-12">
+                            <p class="text-center">Loading categories...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Featured Articles -->
+                <div class="mb-4">
+                    <h2 class="mb-3">Featured Articles</h2>
+                    <div class="row" id="featuredArticlesContainer">
+                        <div class="col-12">
+                            <p class="text-center">Loading featured articles...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Articles -->
+                <div class="mb-4">
+                    <h2 class="mb-3">Recent Articles</h2>
+                    <div id="recentArticlesContainer">
+                        <p class="text-center">Loading recent articles...</p>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <div>
+                            <span id="paginationInfo">Showing 0 of 0 articles</span>
+                        </div>
+                        <div>
+                            <button id="prevPage" class="btn btn-sm btn-secondary mr-2" disabled>
+                                <i class="fas fa-chevron-left"></i> Previous
+                            </button>
+                            <button id="nextPage" class="btn btn-sm btn-secondary" disabled>
+                                Next <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container footer-content">
+        <div class="copyright">
+            &copy; 2025 Dern-Support. All rights reserved.
+        </div>
+        <div class="footer-links">
+            <a href="#" class="mr-3">Privacy Policy</a>
+            <a href="#" class="mr-3">Terms of Service</a>
+            <a href="#">Contact Us</a>
+        </div>
+    </div>
+</footer>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay" style="display: none;">
+    <div class="spinner"></div>
+</div>
+
+<!-- JavaScript -->
+<script src="../../assets/js/utils/auth.js"></script>
+<script src="../../assets/js/main.js"></script>
+<script src="../../assets/js/api/knowledgeBase.js"></script>
+<script>
+    // Pagination state
+    let currentPage = 1;
+    let totalPages = 1;
+    let limit = 10;
+    let currentSearch = '';
+    let currentCategory = '';
+    let currentSortBy = 'createdAt';
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Check if user is logged in
+        if (isAuthenticated()) {
+            // Show sidebar for logged-in users
+            document.getElementById('sidebarContainer').style.display = 'block';
+            document.getElementById('mainContentFull').classList.remove('col-12');
+            document.getElementById('mainContentFull').classList.add('col-9');
+
+            // Check if user is admin
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user.userType === 'admin') {
+                document.getElementById('adminControls').style.display = 'block';
+            }
+        }
+
+        // Load categories
+        await loadCategories();
+
+        // Load featured articles
+        await loadFeaturedArticles();
+
+        // Load recent articles
+        await loadArticles();
+
+        // Handle search form submission
+        document.getElementById('searchForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            currentSearch = document.getElementById('searchQuery').value;
+            currentPage = 1; // Reset to first page when searching
+            loadArticles();
+        });
+
+        // Handle category filter change
+        document.getElementById('categoryFilter').addEventListener('change', () => {
+            currentCategory = document.getElementById('categoryFilter').value;
+            currentPage = 1; // Reset to first page when filtering
+            loadArticles();
+        });
+
+        // Handle sort by change
+        document.getElementById('sortBy').addEventListener('change', () => {
+            currentSortBy = document.getElementById('sortBy').value;
+            loadArticles();
+        });
+
+        // Handle pagination
+        document.getElementById('prevPage').addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                loadArticles();
+            }
+        });
+
+        document.getElementById('nextPage').addEventListener('click', () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                loadArticles();
+            }
+        });
+    });
+
+    async function loadCategories() {
+        try {
+            const result = await getKnowledgeCategories();
+
+            if (result.success) {
+                updateCategoriesUI(result.data.categories);
+
+                // Populate category filter dropdown
+                const categoryFilter = document.getElementById('categoryFilter');
+                categoryFilter.innerHTML = '<option value="">All Categories</option>';
+
+                result.data.categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category._id;
+                    option.textContent = category.name;
+                    categoryFilter.appendChild(option);
+                });
+            } else {
+                document.getElementById('categoriesContainer').innerHTML =
+                    '<div class="col-12"><p class="text-center text-danger">Failed to load categories</p></div>';
+            }
+        } catch (error) {
+            document.getElementById('categoriesContainer').innerHTML =
+                '<div class="col-12"><p class="text-center text-danger">An error occurred while loading categories</p></div>';
+            console.error('Load categories error:', error);
+        }
+    }
+
+    function updateCategoriesUI(categories) {
+        const container = document.getElementById('categoriesContainer');
+
+        if (!categories || categories.length === 0) {
+            container.innerHTML = '<div class="col-12"><p class="text-center">No categories found</p></div>';
+            return;
+        }
+
+        let html = '';
+
+        categories.forEach(category => {
+            html += `
+                    <div class="col-md-4 col-sm-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h3 class="card-title">
+                                    <i class="${category.icon || 'fas fa-folder'} mr-2"></i>
+                                    ${category.name}
+                                </h3>
+                                <p class="card-text">${category.description || 'No description available'}</p>
+                                <p class="text-muted">${category.articleCount || 0} articles</p>
+                            </div>
+                            <div class="card-footer">
+                                <a href="category.html?id=${category._id}" class="btn btn-primary btn-sm">
+                                    Browse Articles
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+        });
+
+        container.innerHTML = html;
+    }
+
+    async function loadFeaturedArticles() {
+        try {
+            const result = await getKnowledgeArticles({
+                limit: 3,
+                sortBy: 'viewCount',
+                sortOrder: 'desc'
+            });
+
+            if (result.success) {
+                updateFeaturedArticlesUI(result.data.articles);
+            } else {
+                document.getElementById('featuredArticlesContainer').innerHTML =
+                    '<div class="col-12"><p class="text-center text-danger">
+                    (Content truncated due to size limit. Use line ranges to read in chunks)

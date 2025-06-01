@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dern-Support | Request Details</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+<!-- Header -->
+<header class="header">
+    <div class="container header-container">
+        <div class="logo">
+            <a href="../../index.html">Dern-Support</a>
+        </div>
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <nav class="nav" id="mainNav">
+            <div class="nav-item">
+                <a href="../../index.html" class="nav-link">Home</a>
+            </div>
+            <div class="nav-item">
+                <a href="../knowledge/index.html" class="nav-link">Knowledge Base</a>
+            </div>
+            <div class="nav-item" id="authLinks">
+                <!-- Will be populated by JavaScript -->
+            </div>
+            <div class="nav-item" id="registerLinks">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </nav>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="main">
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-3">
+                <div class="sidebar">
+                    <ul class="sidebar-menu">
+                        <li class="sidebar-item">
+                            <a href="../dashboard.html" class="sidebar-link">
+                                <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="my-requests.html" class="sidebar-link active">
+                                <i class="fas fa-ticket-alt mr-2"></i> My Requests
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="new-request.html" class="sidebar-link">
+                                <i class="fas fa-plus-circle mr-2"></i> New Request
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="../knowledge/index.html" class="sidebar-link">
+                                <i class="fas fa-book mr-2"></i> Knowledge Base
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="../profile.html" class="sidebar-link">
+                                <i class="fas fa-user-circle mr-2"></i> My Profile
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="col-9">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1>Support Request Details</h1>
+                    <a href="my-requests.html" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left mr-1"></i> Back to Requests
+                    </a>
+                </div>
+
+                <div id="messageContainer" style="display: none;"></div>
+
+                <!-- Request Details -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3 id="requestTitle" class="mb-0">Loading...</h3>
+                            <div>
+                                <span id="requestStatus" class="mr-2">Status: Loading...</span>
+                                <span id="requestPriority">Priority: Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>Request ID:</strong> <span id="requestId">Loading...</span>
+                            </div>
+                            <div class="col-6">
+                                <strong>Request Type:</strong> <span id="requestType">Loading...</span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>Created:</strong> <span id="requestCreated">Loading...</span>
+                            </div>
+                            <div class="col-6">
+                                <strong>Last Updated:</strong> <span id="requestUpdated">Loading...</span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>Assigned To:</strong> <span id="requestAssignedTo">Loading...</span>
+                            </div>
+                            <div class="col-6" id="userInfoContainer">
+                                <!-- Will be populated for admin/technician users -->
+                            </div>
+                        </div>
+
+                        <h4 class="mt-4 mb-3">Description</h4>
+                        <div id="requestDescription" class="mb-4">
+                            Loading...
+                        </div>
+
+                        <!-- Dynamic Fields -->
+                        <div id="dynamicFieldsContainer" class="mb-4">
+                            <!-- Will be populated based on request type -->
+                        </div>
+
+                        <!-- Attachments -->
+                        <h4 class="mt-4 mb-3">Attachments</h4>
+                        <div id="attachmentsContainer" class="mb-4">
+                            <p>Loading attachments...</p>
+                        </div>
+
+                        <!-- Update Form (for users) -->
+                        <div id="updateFormContainer" class="mt-4" style="display: none;">
+                            <h4 class="mb-3">Update Request</h4>
+                            <form id="updateRequestForm">
+                                <div class="form-group">
+                                    <label for="updateTitle" class="form-label">Title</label>
+                                    <input type="text" id="updateTitle" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="updateDescription" class="form-label">Description</label>
+                                    <textarea id="updateDescription" class="form-control" rows="4"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="newAttachments" class="form-label">Add Attachments</label>
+                                    <input type="file" id="newAttachments" class="form-control" multiple>
+                                    <small class="form-text">You can attach screenshots, logs, or other relevant files (max 5 files, 10MB each)</small>
+                                </div>
+                                <div class="form-group text-right">
+                                    <button type="button" id="cancelUpdateButton" class="btn btn-secondary mr-2">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Update Request</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Admin/Technician Controls -->
+                        <div id="adminControlsContainer" class="mt-4" style="display: none;">
+                            <h4 class="mb-3">Update Status</h4>
+                            <form id="adminUpdateForm">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="updateStatus" class="form-label">Status</label>
+                                            <select id="updateStatus" class="form-control">
+                                                <option value="new">New</option>
+                                                <option value="assigned">Assigned</option>
+                                                <option value="in_progress">In Progress</option>
+                                                <option value="on_hold">On Hold</option>
+                                                <option value="resolved">Resolved</option>
+                                                <option value="closed">Closed</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="updatePriority" class="form-label">Priority</label>
+                                            <select id="updatePriority" class="form-control">
+                                                <option value="low">Low</option>
+                                                <option value="medium">Medium</option>
+                                                <option value="high">High</option>
+                                                <option value="critical">Critical</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="adminNotes" class="form-label">Notes</label>
+                                    <textarea id="adminNotes" class="form-control" rows="3"></textarea>
+                                </div>
+                                <div class="form-group text-right">
+                                    <button type="submit" class="btn btn-primary">Update Request</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <button id="editRequestButton" class="btn btn-primary" style="display: none;">
+                                    <i class="fas fa-edit mr-1"></i> Edit Request
+                                </button>
+                            </div>
+                            <div>
+                                <button id="viewHistoryButton" class="btn btn-secondary">
+                                    <i class="fas fa-history mr-1"></i> View History
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Request History (initially hidden) -->
+                <div id="historyContainer" class="card mb-4" style="display: none;">
+                    <div class="card-header">
+                        <h3 class="mb-0">Request History</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="historyContent">
+                            <p>Loading history...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container footer-content">
+        <div class="copyright">
+            &copy; 2025 Dern-Support. All rights reserved.
+        </div>
+        <div class="footer-links">
+            <a href="#" class="mr-3">Privacy Policy</a>
+            <a href="#" class="mr-3">Terms of Service</a>
+            <a href="#">Contact Us</a>
+        </div>
+    </div>
+</footer>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay" style="display: none;">
+    <div class="spinner"></div>
+</div>
+
+<!-- JavaScript -->
+<script src="../../assets/js/utils/auth.js"></script>
+<script src="../../assets/js/main.js"></script>
+<script src="../../assets/js/api/supportRequests.js"></script>
+<script>
+    let currentRequest = null;
+    let isAdmin = false;
+    let isTechnician = false;
+    let isOwner = false;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Check if user is authenticated
+        if (!requireAuth()) {
+            return;
+        }
+
+        // Get request ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const requestId = urlParams.get('id');
+
+        if (!requestId) {
+            showError('No request ID provided', 'messageContainer');
+            return;
+        }
+
+        // Get user data
+        const user = JSON.parse(localStorage.getItem('user'));
+        isAdmin = user.userType === 'admin';
+        isTechnician = user.userType === 'technician';
+
+        // Load request details
+        await loadRequestDetails(requestId);
+
+        // Set up event listeners
+        document.getElementById('viewHistoryButton').addEventListener('click', toggleHistory);
+        document.getElementById('editRequestButton').addEventListener('click', showUpdateForm);
+
+        if (document.getElementById('cancelUpdateButton')) {
+            document.getElementById('cancelUpdateButton').addEventListener('click', hideUpdateForm);
+        }
+
+        // Set up form submissions
+        const updateRequestForm = document.getElementById('updateRequestForm');
+        if (updateRequestForm) {
+            updateRequestForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                await updateRequest();
+            });
+        }
+
+        const adminUpdateForm = document.getElementById('adminUpdateForm');
+        if (adminUpdateForm) {
+            adminUpdateForm.addEventListener(
+                'submit',
+                async (e) => {
+                    e.preventDefault();
+                    await updateRequestStatus();
+                }
+            );
+        }
+        // Check if user is the owner of the request
+        if (currentRequest && user.id === currentRequest.userId) {
+            isOwner = true;
+            document.getElementById('updateFormContainer').style.display = 'block';
+            document.getElementById('editRequestButton').style.display = 'inline-block';
+        }
+        // Show admin controls if user is admin or technician
+        if (isAdmin || isTechnician) {
+            document.getElementById('adminControlsContainer').style.display = 'block';
+            document.getElementById('userInfoContainer').innerHTML = `
+                <strong>Assigned User:</strong> ${currentRequest.assignedToName || 'Unassigned'}
+            `;
+        } else {
+            document.getElementById('userInfoContainer').innerHTML = `
+                <strong>Assigned To:</strong> ${currentRequest.assignedToName || 'Unassigned'}
+            `;
+        }
+        // Show edit button if user is the owner
+        if (isOwner) {
+            document.getElementById('editRequestButton').style.display = 'inline-block';
+        }
+        // Show update form if user is the owner
+        if (isOwner) {
+            document.getElementById('updateFormContainer').style.display = 'block';
+        }
+        // Show attachments if available
+        if (currentRequest.attachments && currentRequest.attachments.length > 0) {
+            const attachmentsContainer = document.getElementById('attachmentsContainer');
+            attachmentsContainer.innerHTML = '';
+            currentRequest.attachments.forEach((attachment) => {
+                const link = document.createElement('a');
+                link.href = attachment.url;
+                link.textContent = attachment.name;
+                link.target = '_blank';
+                link.className = 'attachment-link';
+                attachmentsContainer.appendChild(link);
+            });
+        } else {
+            document.getElementById('attachmentsContainer').innerHTML = '<p>No attachments available.</p>';
+        }
+        // Show dynamic fields based on request type
+        await loadDynamicFields(currentRequest.requestType);
+        // Show request history if available
+        if (currentRequest.history && currentRequest.history.length > 0) {
+            const historyContainer = document.getElementById('historyContent');
+            historyContainer.innerHTML = '';
+            currentRequest.history.forEach((entry) => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <strong>${entry.timestamp}</strong> - ${entry.action} by ${entry.userName || 'System'}<br>
+                    <p>${entry.notes}</p>
+                `;
+                historyContainer.appendChild(historyItem);
+            });
+        } else {
+            document.getElementById('historyContent').innerHTML = '<p>No history available.</p>';
+        }
+        // Show loading overlay
+        document.getElementById('loadingOverlay').style.display = 'none';
+    });
+    async function loadRequestDetails(requestId) {
+        try {
+            document.getElementById('loadingOverlay').style.display = 'block';
+            currentRequest = await getSupportRequestById(requestId);
+            if (!currentRequest) {
+                showError('Request not found', 'messageContainer');
+                return;
+            }
+            populateRequestDetails(currentRequest);
+        } catch (error) {
+            showError('Failed to load request details: ' + error.message, 'messageContainer');
+        } finally {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+    }
+    function populateRequestDetails(request) {
+        document.getElementById('requestTitle').textContent = request.title;
+        document.getElementById('requestId').textContent = request.id;
+        document.getElementById('requestType').textContent = request.requestType;
+        document.getElementById('requestCreated').textContent = new Date(request.createdAt).toLocaleString();
+        document.getElementById('requestUpdated').textContent = new Date(request.updatedAt).toLocaleString();
+        document.getElementById('requestStatus').textContent = `Status: ${request.status}`;
+        document.getElementById('requestPriority').textContent = `Priority: ${request.priority}`;
+        document.getElementById('requestDescription').innerHTML = request.description || 'No description provided';
+        if (request.assignedToName) {
+            document.getElementById('requestAssignedTo').textContent = request.assignedToName;
+        } else {
+            document.getElementById('requestAssignedTo').textContent = 'Unassigned';
+        }
+    }
+    function toggleHistory() {
+        const historyContainer = document.getElementById('historyContainer');
+        if (historyContainer.style.display === 'none') {
+            historyContainer.style.display = 'block';
+        } else {
+            historyContainer.style.display = 'none';
+        }
+    }
+</script>

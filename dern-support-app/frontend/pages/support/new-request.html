@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dern-Support | New Support Request</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+<!-- Header -->
+<header class="header">
+    <div class="container header-container">
+        <div class="logo">
+            <a href="../../index.html">Dern-Support</a>
+        </div>
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <nav class="nav" id="mainNav">
+            <div class="nav-item">
+                <a href="../../index.html" class="nav-link">Home</a>
+            </div>
+            <div class="nav-item">
+                <a href="../knowledge/index.html" class="nav-link">Knowledge Base</a>
+            </div>
+            <div class="nav-item" id="authLinks">
+                <!-- Will be populated by JavaScript -->
+            </div>
+            <div class="nav-item" id="registerLinks">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </nav>
+    </div>
+</header>
+
+<!-- Main Content -->
+<main class="main">
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-3">
+                <div class="sidebar">
+                    <ul class="sidebar-menu">
+                        <li class="sidebar-item">
+                            <a href="../dashboard.html" class="sidebar-link">
+                                <i class="fas fa-tachometer-alt mr-2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="my-requests.html" class="sidebar-link">
+                                <i class="fas fa-ticket-alt mr-2"></i> My Requests
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="new-request.html" class="sidebar-link active">
+                                <i class="fas fa-plus-circle mr-2"></i> New Request
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="../knowledge/index.html" class="sidebar-link">
+                                <i class="fas fa-book mr-2"></i> Knowledge Base
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="../profile.html" class="sidebar-link">
+                                <i class="fas fa-user-circle mr-2"></i> My Profile
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="col-9">
+                <h1>Submit a New Support Request</h1>
+                <p class="mb-4">Please provide as much detail as possible to help us resolve your issue quickly.</p>
+
+                <div id="messageContainer" style="display: none;"></div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <form id="newRequestForm">
+                            <div class="form-group">
+                                <label for="title" class="form-label">Request Title</label>
+                                <input type="text" id="title" class="form-control" required>
+                                <small class="form-text">A brief summary of your issue</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="requestType" class="form-label">Request Type</label>
+                                <select id="requestType" class="form-control" required>
+                                    <option value="">Select a request type</option>
+                                    <option value="hardware">Hardware Issue</option>
+                                    <option value="software">Software Issue</option>
+                                    <option value="network">Network Issue</option>
+                                    <option value="account">Account Issue</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="priority" class="form-label">Priority</label>
+                                <select id="priority" class="form-control">
+                                    <option value="low">Low - Not urgent</option>
+                                    <option value="medium" selected>Medium - Standard priority</option>
+                                    <option value="high">High - Urgent issue</option>
+                                    <option value="critical">Critical - System down</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea id="description" class="form-control" rows="6" required></textarea>
+                                <small class="form-text">Please provide a detailed description of your issue, including any error messages, steps to reproduce, and what you've already tried</small>
+                            </div>
+
+                            <!-- Dynamic Fields Container -->
+                            <div id="dynamicFieldsContainer" class="mb-4">
+                                <!-- Will be populated based on request type -->
+                            </div>
+
+                            <div class="form-group">
+                                <label for="attachments" class="form-label">Attachments (Optional)</label>
+                                <input type="file" id="attachments" class="form-control" multiple>
+                                <small class="form-text">You can attach screenshots, logs, or other relevant files (max 5 files, 10MB each)</small>
+                            </div>
+
+                            <div class="form-group text-right">
+                                <button type="button" id="cancelButton" class="btn btn-secondary mr-2">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Submit Request</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container footer-content">
+        <div class="copyright">
+            &copy; 2025 Dern-Support. All rights reserved.
+        </div>
+        <div class="footer-links">
+            <a href="#" class="mr-3">Privacy Policy</a>
+            <a href="#" class="mr-3">Terms of Service</a>
+            <a href="#">Contact Us</a>
+        </div>
+    </div>
+</footer>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay" style="display: none;">
+    <div class="spinner"></div>
+</div>
+
+<!-- JavaScript -->
+<script src="../../assets/js/utils/auth.js"></script>
+<script src="../../assets/js/main.js"></script>
+<script src="../../assets/js/api/supportRequests.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Check if user is authenticated
+        if (!requireAuth()) {
+            return;
+        }
+
+        // Handle request type change
+        const requestTypeSelect = document.getElementById('requestType');
+        requestTypeSelect.addEventListener('change', () => {
+            updateDynamicFields(requestTypeSelect.value);
+        });
+
+        // Handle form submission
+        const newRequestForm = document.getElementById('newRequestForm');
+        newRequestForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await submitRequest();
+        });
+
+        // Handle cancel button
+        document.getElementById('cancelButton').addEventListener('click', () => {
+            window.location.href = 'my-requests.html';
+        });
+    });
+
+    function updateDynamicFields(requestType) {
+        const container = document.getElementById('dynamicFieldsContainer');
+
+        // Clear existing fields
+        container.innerHTML = '';
+
+        if (!requestType) {
+            return;
+        }
+
+        // Define dynamic fields based on request type
+        let fields = [];
+
+        switch (requestType) {
+            case 'hardware':
+                fields = [
+                    { name: 'deviceType', label: 'Device Type', type: 'text', required: true, placeholder: 'e.g., Laptop, Desktop, Printer' },
+                    { name: 'model', label: 'Model', type: 'text', required: true, placeholder: 'e.g., Dell XPS 15, HP LaserJet Pro' },
+                    { name: 'serialNumber', label: 'Serial Number', type: 'text', required: false },
+                    { name: 'purchaseDate', label: 'Purchase Date', type: 'date', required: false }
+                ];
+                break;
+            case 'software':
+                fields = [
+                    { name: 'softwareName', label: 'Software Name', type: 'text', required: true, placeholder: 'e.g., Microsoft Office, Adobe Photoshop' },
+                    { name: 'version', label: 'Version', type: 'text', required: true, placeholder: 'e.g., 2021, 22.5.0' },
+                    { name: 'operatingSystem', label: 'Operating System', type: 'text', required: true, placeholder: 'e.g., Windows 11, macOS Monterey' },
+                    { name: 'installationDate', label: 'Installation Date', type: 'date', required: false }
+                ];
+                break;
+            case 'network':
+                fields = [
+                    { name: 'networkType', label: 'Network Type', type: 'select', required: true, options: [
+                            { value: 'wifi', label: 'Wi-Fi' },
+                            { value: 'ethernet', label: 'Ethernet' },
+                            { value: 'vpn', label: 'VPN' },
+                            { value: 'other', label: 'Other' }
+                        ] },
+                    { name: 'deviceAffected', label: 'Device Affected', type: 'text', required: true, placeholder: 'e.g., Laptop, Smartphone, Router' },
+                    { name: 'connectionType', label: 'Connection Type', type: 'text', required: false, placeholder: 'e.g., Home, Office, Public' }
+                ];
+                break;
+            case 'account':
+                fields = [
+                    { name: 'accountType', label: 'Account Type', type: 'select', required: true, options: [
+                            { value: 'email', label: 'Email' },
+                            { value: 'software', label: 'Software License' },
+                            { value: 'system', label: 'System Access' },
+                            { value: 'other', label: 'Other' }
+                        ] },
+                    { name: 'username', label: 'Username/Email', type: 'text', required: true },
+                    { name: 'lastAccessDate', label: 'Last Access Date', type: 'date', required: false }
+                ];
+                break;
+            case 'other':
+                fields = [
+                    { name: 'category', label: 'Category', type: 'text', required: false, placeholder: 'e.g., Training, Consultation, Feedback' }
+                ];
+                break;
+        }
+
+        // Create HTML for dynamic fields
+        if (fields.length > 0) {
+            container.innerHTML = `<h4 class="mb-3">Additional Information</h4>`;
+
+            fields.forEach(field => {
+                let fieldHtml = `
+                        <div class="form-group">
+                            <label for="${field.name}" class="form-label">${field.label}${field.required ? ' *' : ''}</label>
+                    `;
+
+                if (field.type === 'select') {
+                    fieldHtml += `
+                            <select id="${field.name}" name="${field.name}" class="form-control" ${field.required ? 'required' : ''}>
+                                <option value="">Select ${field.label}</option>
+                        `;
+
+                    field.options.forEach(option => {
+                        fieldHtml += `<option value="${option.value}">${option.label}</option>`;
+                    });
+
+                    fieldHtml += `</select>`;
+                } else {
+                    fieldHtml += `
+                            <input type="${field.type}" id="${field.name}" name="${field.name}" class="form-control"
+                                ${field.placeholder ? `placeholder="${field.placeholder}"` : ''} ${field.required ? 'required' : ''}>
+                        `;
+                }
+
+                fieldHtml += `</div>`;
+                container.innerHTML += fieldHtml;
+            });
+        }
+    }
+
+    async function submitRequest() {
+        try {
+            // Get form values
+            const title = document.getElementById('title').value;
+            const requestType = document.getElementById('requestType').value;
+            const priority = document.getElementById('priority').value;
+            const description = document.getElementById('description').value;
+            const attachmentsInput = document.getElementById('attachments');
+
+            // Validate required fields
+            if (!title || !requestType || !description) {
+                showError('Please fill in all required fields', 'messageContainer');
+                return;
+            }
+
+            // Collect dynamic fields
+            const dynamicFields = {};
+            const container = document.getElementById('dynamicFieldsContainer');
+            const inputs = container.querySelectorAll('input, select');
+
+            inputs.forEach(input => {
+                dynamicFields[input.name] = input.value;
+            });
+
+            // Prepare request data
+            const requestData = {
+                title,
+                requestType,
+                priority,
+                description,
+                dynamicFields
+            };
+            // Handle attachments
+            const attachments = [];
+            if (attachmentsInput.files.length > 0) {
+                for (let i = 0; i < attachmentsInput.files.length; i++) {
+                    const file = attachmentsInput.files[i];
+                    if (file.size > 10 * 1024 * 1024) { // 10MB limit
+                        showError('Each attachment must be less than 10MB', 'messageContainer');
+                        return;
+                    }
+                    attachments.push(file);
+                }
+            } else {
+                attachments.push(null); // No attachments
+            }
+            // Show loading overlay
+            document.getElementById('loadingOverlay').style.display = 'block';
+            // Submit request
+            const response = await createSupportRequest(requestData, attachments);
+            // Hide loading overlay
+            document.getElementById('loadingOverlay').style.display = 'none';
+            // Handle response
+            if (response.success) {
+                showSuccess('Support request submitted successfully!', 'messageContainer');
+                newRequestForm.reset();
+                updateDynamicFields(''); // Clear dynamic fields
+            } else {
+                showError(response.message || 'Failed to submit support request', 'messageContainer');
+            }
+
+        } catch (error) {
+            console.error('Error submitting support request:', error);
+            showError('An unexpected error occurred. Please try again later.', 'messageContainer');
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+    }
+</script>

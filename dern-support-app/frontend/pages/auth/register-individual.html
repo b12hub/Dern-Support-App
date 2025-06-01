@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dern-Support | Register Individual</title>
+  <link rel="stylesheet" href="../../assets/css/main.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+<!-- Header -->
+<header class="header">
+  <div class="container header-container">
+    <div class="logo">
+      <a href="../../index.html">Dern-Support</a>
+    </div>
+    <button class="menu-toggle" id="menuToggle">
+      <i class="fas fa-bars"></i>
+    </button>
+    <nav class="nav" id="mainNav">
+      <div class="nav-item">
+        <a href="../../index.html" class="nav-link">Home</a>
+      </div>
+      <div class="nav-item">
+        <a href="../knowledge/index.html" class="nav-link">Knowledge Base</a>
+      </div>
+      <div class="nav-item" id="authLinks">
+        <a href="login.html" class="nav-link">Login</a>
+      </div>
+      <div class="nav-item" id="registerLinks">
+        <a href="register-individual.html" class="nav-link">Register</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- Main Content -->
+<main class="main">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-8">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="text-center">Individual Registration</h2>
+          </div>
+          <div class="card-body">
+            <div id="messageContainer" style="display: none;"></div>
+
+            <form id="registerForm">
+              <div class="row">
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="firstName" class="form-label">First Name</label>
+                    <input type="text" id="firstName" class="form-control" required>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="lastName" class="form-label">Last Name</label>
+                    <input type="text" id="lastName" class="form-control" required>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" id="email" class="form-control" required>
+              </div>
+
+              <div class="form-group">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="tel" id="phone" class="form-control">
+              </div>
+
+              <div class="row">
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" class="form-control" required>
+                    <small class="form-text">Password must be at least 6 characters long</small>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                    <input type="password" id="confirmPassword" class="form-control" required>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <div class="form-check">
+                  <input type="checkbox" id="termsAgreement" class="form-check-input" required>
+                  <label for="termsAgreement" class="form-check-label">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block">Register Individual Account</button>
+              </div>
+            </form>
+          </div>
+          <div class="card-footer text-center">
+            <p>Already have an account? <a href="login.html">Login</a></p>
+            <p>Are you a business user? <a href="register-business.html">Register as Business</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container footer-content">
+    <div class="copyright">
+      &copy; 2025 Dern-Support. All rights reserved.
+    </div>
+    <div class="footer-links">
+      <a href="#" class="mr-3">Privacy Policy</a>
+      <a href="#" class="mr-3">Terms of Service</a>
+      <a href="#">Contact Us</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay" style="display: none;">
+  <div class="spinner"></div>
+</div>
+
+<!-- JavaScript -->
+<script src="../../assets/js/utils/auth.js"></script>
+<script src="../../assets/js/main.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Check if user is already logged in
+    if (isAuthenticated()) {
+      const userRole = getUserRole();
+
+      // Redirect based on user role
+      if (userRole === 'admin' || userRole === 'technician') {
+        window.location.href = '../admin/dashboard.html';
+      } else {
+        window.location.href = '../dashboard.html';
+      }
+    }
+
+    // Handle registration form submission
+    const registerForm = document.getElementById('registerForm');
+    const messageContainer = document.getElementById('messageContainer');
+
+    registerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      // Validate passwords match
+      if (password !== confirmPassword) {
+        showError('Passwords do not match', 'messageContainer');
+        return;
+      }
+
+      // Validate password length
+      if (password.length < 6) {
+        showError('Password must be at least 6 characters long', 'messageContainer');
+        return;
+      }
+
+      const userData = {
+        firstName,
+        lastName,
+        email,
+        phone,
+        password
+      };
+
+      const result = await registerIndividual(userData);
+
+      if (result.success) {
+        // Show success message
+        showSuccess('Registration successful! Please check your email for verification instructions.', 'messageContainer');
+
+        // Clear form
+        registerForm.reset();
+
+        // Redirect to login page after a delay
+        setTimeout(() => {
+          window.location.href = 'login.html';
+        }, 3000);
+      } else {
+        // Show error message
+        showError(result.error, 'messageContainer');
+      }
+    });
+  });
+</script>
+</body>
+</html>
